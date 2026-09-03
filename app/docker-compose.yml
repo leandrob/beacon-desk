@@ -27,6 +27,8 @@ services:
       PORT: "4100"
       DB_PATH: "/app/backend/data/desk.db"
       JWT_SECRET: "local-dev-secret"
+      # Demo dataset: analytics (default) or commerce. Only used on first seed.
+      SEED_PROFILE: "${SEED_PROFILE:-analytics}"
       # Seed passwords for the demo users (only used on first seed).
       ADMIN_PASSWORD: "${ADMIN_PASSWORD:-changeme}"
       AGENT_PASSWORD: "${AGENT_PASSWORD:-changeme}"
