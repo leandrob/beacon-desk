@@ -28,12 +28,16 @@ export function seed({ force = false } = {}) {
   const tx = db.transaction(() => {
     // --- Agents -----------------------------------------------------------
     const insertUser = db.prepare('INSERT INTO users (name, email, password_hash, role, title, color, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    // Passwords come from the environment so deployed instances can set them
+    // as secrets instead of shipping them in source.
+    const adminPassword = process.env.ADMIN_PASSWORD || 'changeme';
+    const agentPassword = process.env.AGENT_PASSWORD || 'changeme';
     const agents = [
-      ['Maya Okafor', 'admin@desk.test', 'admin123', 'admin', 'Support Lead', '#f59e0b'],
-      ['Diego Ferreira', 'agent@desk.test', 'agent123', 'agent', 'Support Engineer', '#38bdf8'],
-      ['Priya Raman', 'priya@desk.test', 'agent123', 'agent', 'Support Engineer', '#a78bfa'],
-      ['Tomasz Nowak', 'tomasz@desk.test', 'agent123', 'agent', 'Billing Specialist', '#34d399'],
-      ['Hannah Lee', 'hannah@desk.test', 'agent123', 'agent', 'Technical Support', '#fb7185'],
+      ['Maya Okafor', 'admin@desk.test', adminPassword, 'admin', 'Support Lead', '#f59e0b'],
+      ['Diego Ferreira', 'agent@desk.test', agentPassword, 'agent', 'Support Engineer', '#38bdf8'],
+      ['Priya Raman', 'priya@desk.test', agentPassword, 'agent', 'Support Engineer', '#a78bfa'],
+      ['Tomasz Nowak', 'tomasz@desk.test', agentPassword, 'agent', 'Billing Specialist', '#34d399'],
+      ['Hannah Lee', 'hannah@desk.test', agentPassword, 'agent', 'Technical Support', '#fb7185'],
     ];
     const A = agents.map((a) => insertUser.run(a[0], a[1], bcrypt.hashSync(a[2], 10), a[3], a[4], a[5], ago(24 * 90)).lastInsertRowid);
 

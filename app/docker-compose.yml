@@ -27,6 +27,9 @@ services:
       PORT: "4100"
       DB_PATH: "/app/backend/data/desk.db"
       JWT_SECRET: "local-dev-secret"
+      # Seed passwords for the demo users (only used on first seed).
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-changeme}"
+      AGENT_PASSWORD: "${AGENT_PASSWORD:-changeme}"
     volumes:
       - ./backend:/app/backend
       - backend-node-modules:/app/backend/node_modules

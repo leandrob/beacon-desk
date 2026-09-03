@@ -8,16 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/Spinner';
 import { toast } from '@/components/ui/sonner';
 
-const DEMO = [
-  { label: 'Support lead (admin)', email: 'admin@desk.test', password: 'admin123' },
-  { label: 'Support engineer', email: 'agent@desk.test', password: 'agent123' },
-];
-
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState(DEMO[0].email);
-  const [password, setPassword] = useState(DEMO[0].password);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e) {
@@ -71,15 +66,6 @@ export default function Login() {
               {submitting ? <Spinner className="h-4 w-4 text-primary-foreground" /> : 'Sign in'}
             </Button>
           </form>
-          <div className="mt-6 space-y-2">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Demo accounts</p>
-            {DEMO.map((d) => (
-              <button key={d.email} type="button" onClick={() => { setEmail(d.email); setPassword(d.password); }} className="flex w-full items-center justify-between rounded-md border bg-muted/40 px-3 py-2 text-left text-xs transition-colors hover:border-primary/50">
-                <span className="font-medium">{d.label}</span>
-                <span className="font-mono text-muted-foreground">{d.email}</span>
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>
