@@ -1,0 +1,54 @@
+# Default stack: development with live reload.
+#
+#   docker compose up
+#   open http://localhost:5174
+#
+# Source is mounted into the containers, so:
+#   - editing any frontend file hot-reloads the browser instantly (Vite HMR)
+#   - editing any backend file restarts the API (nodemon)
+#
+# For a production build (single container on :4100) use docker-compose.prod.yml:
+#   docker compose -f docker-compose.prod.yml up --build
+#
+# Ports 5174/4100 are deliberately different from Nimbus CRM (5173/4000) so
+# both demo stacks can run side by side.
+#
+# node_modules live in named volumes so host (macOS) binaries never clash with
+# the Linux container's (important for native modules like better-sqlite3).
+
+name: beacon-desk
+
+services:
+  backend:
+    image: node:20-slim
+    working_dir: /app/backend
+    command: sh -c "npm install && npm run dev"
+    environment:
+      PORT: "4100"
+      DB_PATH: "/app/backend/data/desk.db"
+      JWT_SECRET: "local-dev-secret"
+    volumes:
+      - ./backend:/app/backend
+      - backend-node-modules:/app/backend/node_modules
+    ports:
+      - "4100:4100"
+
+  frontend:
+    image: node:20-slim
+    working_dir: /app/frontend
+    command: sh -c "npm install && npm run dev -- --host"
+    environment:
+      BACKEND_URL: "${BACKEND_URL:-http://backend:4100}"
+      # Required for file-change detection on mounted volumes.
+      VITE_USE_POLLING: "true"
+    volumes:
+      - ./frontend:/app/frontend
+      - frontend-node-modules:/app/frontend/node_modules
+    ports:
+      - "5174:5174"
+    depends_on:
+      - backend
+
+volumes:
+  backend-node-modules:
+  frontend-node-modules:

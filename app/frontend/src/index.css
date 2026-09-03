@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Beacon Desk — dark "operations console" palette with an amber signal color. */
+@layer base {
+  :root {
+    --background: 228 28% 6%;
+    --foreground: 40 18% 94%;
+    --card: 228 24% 9%;
+    --card-foreground: 40 18% 94%;
+    --popover: 228 24% 9%;
+    --popover-foreground: 40 18% 94%;
+    --primary: 38 96% 56%;
+    --primary-foreground: 30 60% 8%;
+    --secondary: 228 20% 14%;
+    --secondary-foreground: 40 18% 94%;
+    --muted: 228 20% 13%;
+    --muted-foreground: 224 12% 62%;
+    --accent: 228 22% 16%;
+    --accent-foreground: 40 18% 96%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 228 18% 17%;
+    --input: 228 18% 20%;
+    --ring: 38 96% 56%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1, 'ss01' 1;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 50% -10%, hsl(38 96% 56% / 0.10), transparent 70%),
+      linear-gradient(hsl(var(--background)), hsl(var(--background)));
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
+  }
+}
+
+/* Thin scrollbars for the dark shell. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { @apply rounded-full bg-border; }
+::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/40; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Subtle grid texture used behind the login card. */
+.bg-grid {
+  background-image:
+    linear-gradient(hsl(var(--border) / 0.6) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.6) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Lightweight "prose" for knowledge base articles rendered from plain text. */
+.article-body h2 { @apply mt-6 mb-2 text-lg font-bold; }
+.article-body p { @apply mb-3 leading-relaxed; }
+.article-body ul, .article-body ol { @apply mb-3 ml-5 list-disc space-y-1; }
+.article-body ol { @apply list-decimal; }
+.article-body blockquote { @apply my-3 border-l-2 border-primary/60 pl-3 text-muted-foreground; }
+.article-body code { @apply rounded bg-muted px-1 py-0.5 font-mono text-[0.85em]; }

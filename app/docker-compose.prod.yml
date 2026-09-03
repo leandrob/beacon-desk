@@ -1,0 +1,27 @@
+# Production stack: builds the frontend and serves everything from a single
+# container on port 4100.
+#
+#   docker compose -f docker-compose.prod.yml up --build
+#   open http://localhost:4100
+
+name: beacon-desk-prod
+
+services:
+  desk:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beacon-desk
+    ports:
+      - "4100:4100"
+    environment:
+      # Change this in any non-local deployment.
+      JWT_SECRET: "local-dev-secret"
+      DB_PATH: "/app/data/desk.db"
+    volumes:
+      # Persist the SQLite database across container restarts.
+      - desk-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  desk-data:
