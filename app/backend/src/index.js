@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 4100;
 // Initialize database, run migrations, and seed demo data on first run.
 initSchema();
 migrate();
-seed();
+await seed();
 
 const app = express();
 app.use(cors());

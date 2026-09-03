@@ -27,6 +27,8 @@ services:
       PORT: "4100"
       DB_PATH: "/app/backend/data/desk.db"
       JWT_SECRET: "local-dev-secret"
+      # Demo dataset: analytics (default) or commerce. Only used on first seed.
+      SEED_PROFILE: "${SEED_PROFILE:-analytics}"
     volumes:
       - ./backend:/app/backend
       - backend-node-modules:/app/backend/node_modules

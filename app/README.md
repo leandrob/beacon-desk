@@ -51,6 +51,27 @@ are relative to the moment the seed runs. To start over with a fresh database:
 docker compose down -v   # removes volumes, re-seeds on next start
 ```
 
+### Seed profiles
+
+Two independent demo datasets ship with the app, selected with the
+`SEED_PROFILE` environment variable (read once, when the database is empty):
+
+| Profile     | Scenario                                                               |
+| ----------- | ---------------------------------------------------------------------- |
+| `analytics` | *(default)* Beacon as a BI / dashboards product; SaaS teams as customers |
+| `commerce`  | Beacon as an e-commerce platform; online shops as customers            |
+
+Each profile has its own agents (same login emails), customers, tickets,
+tags, macros and knowledge base, so two deployments of the same build can show
+completely different data:
+
+```bash
+SEED_PROFILE=commerce docker compose up
+```
+
+Profiles live in `backend/src/db/seed-data/`; add a file there and list it in
+`PROFILES` in `seed.js` to create another one.
+
 Ports **5174** (frontend) and **4100** (backend) are intentionally different
 from Nimbus CRM, so both demos can run side by side.
 
@@ -108,7 +129,8 @@ the first time the backend starts. To re-seed from scratch:
 
 ```bash
 cd app/backend
-node src/db/seed.js --force
+node src/db/seed.js --force                      # analytics profile
+node src/db/seed.js --force --profile commerce   # commerce profile
 ```
 
 ---
@@ -161,7 +183,7 @@ node src/db/seed.js --force
 app/
 ├── backend/                  Node + Express + SQLite + WebSocket
 │   └── src/
-│       ├── db/               schema.sql, connection, migrate (SLA defaults), seed
+│       ├── db/               schema.sql, connection, migrate (SLA defaults), seed + seed-data/ profiles
 │       ├── routes/           one file per resource (REST endpoints)
 │       ├── services/         ticket helpers (SLA math, decorate, events) + activity log
 │       ├── websocket/        WebSocket hub + broadcast helper
